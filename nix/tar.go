@@ -172,7 +172,7 @@ func appendFileToTar(tw *tar.Writer, srcPath, dstPath string, info os.FileInfo, 
 							logrus.Warnf("capability %s not supported", capStr)
 						}
 						if capBit > 0 {
-							capBits &= uint32(1 << capBit)
+							capBits |= uint32(1 << capBit)
 						}
 					}
 					data := NewVFSCapData(capBits, capBits, true, 0)
