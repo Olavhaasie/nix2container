@@ -158,7 +158,24 @@ func appendFileToTar(tw *tar.Writer, srcPath, dstPath string, info os.FileInfo, 
 				if re.Match([]byte(srcPath)) {
 					logrus.Infof("Regex matches!: %s path: %s", cap.Regex, srcPath)
 
-					data := NewVFSCapData(uint32(1 << CAP_NET_BIND_SERVICE), uint32(1 << CAP_NET_BIND_SERVICE), true, 0)
+					var capBits uint32 = 0
+					for _, capStr := range cap.Caps {
+						var capBit uint32 = 0
+						switch capStr {
+						case "CAP_NET_BIND_SERVICE":
+							capBit = CAP_NET_BIND_SERVICE
+						case "CAP_SETUID":
+							capBit = CAP_SETUID
+						case "CAP_SETGID":
+							capBit = CAP_SETGID
+						default:
+							logrus.Warnf("capability %s not supported", capStr)
+						}
+						if capBit > 0 {
+							capBits &= uint32(1 << capBit)
+						}
+					}
+					data := NewVFSCapData(capBits, capBits, true, 0)
 
 					logrus.Infof("capabilities data: %v", data)
 

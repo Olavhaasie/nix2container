@@ -17,6 +17,8 @@ const (
 
 	// Capability constants
 	CAP_NET_BIND_SERVICE = 10
+	CAP_SETUID = 7
+	CAP_SETGID = 6
 )
 
 // CapData represents the capability data pair of permitted and inheritable flags
